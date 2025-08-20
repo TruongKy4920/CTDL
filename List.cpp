@@ -51,6 +51,7 @@ struct Vector {
         }
      
     }
+
     void push_back(int value){
         if(arr==NULL){
             arr= new int[1];
@@ -58,11 +59,11 @@ struct Vector {
             length++;
             return;
         }
-        int index;
+        
         for(int i=0;i<length;i++){
             if(value<arr[i]) {
-               index=i;
-               insert(value,index);
+               
+               insert(value,i);
                break;
             }
             else if(i==length-1){
@@ -94,14 +95,7 @@ struct Vector {
                 arr=temp;
                 length++;
             }
-            else if(index==length-1){
-                int* temp= new int[length+1];
-                for(int i=0;i<length;i++) temp[i]=arr[i];
-
-                temp[length++]=value;
-                delete[] arr;
-                arr=temp;
-            }
+            
             else {
                 int* temp=new int[length+1];
                 
@@ -128,10 +122,11 @@ int main(){
     
       Vector a;
       a.push_back(2);
-      a.push_back(4);
-      a.push_back(8);
+      a.push_back(1);
+      a.push_back(7);
+      a.push_back(3);
       a.push_back(0);
-      a.push_back(6);
+     
      
       //a.del(a.length-1);
       
