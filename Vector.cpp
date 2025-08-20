@@ -30,43 +30,26 @@ struct Vector {
         }
         return -1;
     }
-    void del(int value){
-        if(arr[0]==value){
-            int* temp= new int[length-1];
-            int j=0;
-
-            for(int i=1;i<length;i++) temp[j++]=arr[i];
-            length--;
-            delete[] arr;
-            arr=temp;
-            
-        }
-        else if(arr[length-1]==value){
-            int* temp= new int[length-1];
-
-            for(int i=0;i<length-1;i++) temp[i]=arr[i];
-            length--;
-            delete[] arr;
-            arr=temp;
-           
-        }
-        else {
-            int del_index=binary_search(0,length,value);
-            int* temp=new int[length-1];
-            int j=del_index;
-
-            for(int i=0;i<del_index;i++)  temp[i]=arr[i];
-            
-            for(int i=del_index+1;i<length;i++){
-                temp[j]=arr[i];
-                j++;
+    void del(int index){
+        if(index==0){
+            int *temp = new int[length-1];
+            for(int i=0;i<length;i++){
+                temp[i]=arr[i+1];
             }
-            length--;
             delete[] arr;
+            length--;
             arr=temp;
-            
         }
-
+        else if(index==length-1){
+            int *temp = new int[length-1];
+            for(int i=0;i<length-1;i++){
+                temp[i]=arr[i];
+            }
+            delete[] arr;
+            length--;
+            arr=temp;
+        }
+     
     }
     void push_back(int value){
         if(arr==NULL){
@@ -87,8 +70,8 @@ struct Vector {
             if(index==0){
                 int* temp= new int[length+1];
                 temp[0]=value;
-                int j=1;
-                for(int i=0;i<length;i++) temp[j++]=arr[i];
+                
+                for(int i=0;i<length;i++) temp[i+1]=arr[i];
 
                 delete[] arr;
                 arr=temp;
@@ -96,25 +79,22 @@ struct Vector {
             }
             else if(index==length-1){
                 int* temp= new int[length+1];
-                temp[index]=value;
-                int j=index-1;
-                for(int i=length-1;i>=0;i--) temp[j--]=arr[i];
-            
+                for(int i=0;i<length;i++) temp[i]=arr[i];
+
+                temp[length++]=value;
                 delete[] arr;
                 arr=temp;
-                length++;
             }
             else {
                 int* temp=new int[length+1];
                 
                 
                 for(int i=0;i<index;i++)  temp[i]=arr[i];
+
                 temp[index]=value;
-                int j=index+1;
-                for(int i=index;i<length;i++){
-                    temp[j]=arr[i];
-                    j++;
-                }
+                
+                for(int i=index;i<length;i++) temp[i+1]=arr[i];
+                
                 length++;
                 delete[] arr;
                 arr=temp;
@@ -135,6 +115,8 @@ int main(){
       a.push_back(8);
       a.push_back(0);
       a.push_back(6);
+      a.insert(7,3);
+      //a.del(a.length-1);
       
       for(int i=0;i<a.length;i++){
         cout<<a[i]<<" ";
