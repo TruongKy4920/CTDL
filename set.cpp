@@ -121,7 +121,7 @@ int main(){
     a.add(3);
     a.add(1);
     a.add(7);
- 
+    a.add(9);
     a.erase(3);
     a.print();
 }

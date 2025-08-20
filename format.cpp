@@ -54,7 +54,7 @@ struct Set{
             }
 
         }
-    int binary_search(int start,int end,int value){
+    int find(int start,int end,int value){
         while(start<=end){
         int mid= (start+end)/2;
         if(arr[mid]==value) return mid;
@@ -72,7 +72,7 @@ struct Set{
             }
 
             for(int i=0;i<length;i++){
-                if(value<arr[i] && (binary_search(0,length-1,value)==-1) ) {
+                if(value<arr[i] && (find(0,length-1,value)==-1) ) {
                     insert(value,i);
                     break;
                 }     
@@ -81,7 +81,7 @@ struct Set{
                     for(int i=0;i<length;i++){
                         temp[i]=arr[i];
                     }
-                    if((binary_search(0,length-1,value)==-1)) temp[length++]=value;
+                    if((find(0,length-1,value)==-1)) temp[length++]=value;
                     delete[] arr;
                     arr=temp;
                     break;
@@ -108,20 +108,59 @@ struct Set{
         }
     }
     
-
+    void intersection(const Set& other_set){
+        int* temp=new int[other_set.length];
+        int j=0;
+        for(int i=0;i<other_set.length;i++){
+            if(find(0,length-1,other_set.arr[i])!=-1){
+                int index=find(0,length-1,other_set.arr[i]);
+                temp[j]=arr[index];
+                j++;
+            }
+           
+        }
+        cout<<"Phan tu giao nhau cua 2 mang\n";
+        for(int i=0;i<j;i++){
+            cout<<temp[i]<<" ";
+        }
+        
+    }
+    void uni(const Set& other_set){
+        int* temp=new int[other_set.length];
+        int j=0;
+        for(int i=0;i<other_set.length;i++){
+            if(find(0,length-1,other_set.arr[i])!=-1){
+                int index=find(0,length-1,other_set.arr[i]);
+                temp[j]=arr[index];
+                j++;
+            }
+           
+        }
+        cout<<"Phan tu giao nhau cua 2 mang\n";
+        for(int i=0;i<j;i++){
+            cout<<temp[i]<<" ";
+        }
+        
+    }
 };
 
 
 int main(){
     
-    Set a;
+     Set a,b;
     a.add(2);
     a.add(1);
     a.add(7);
     a.add(3);
     a.add(1);
     a.add(7);
- 
-    a.erase(3);
+    a.add(9);
+    b.add(3);
+    b.add(7);
     a.print();
+    cout<<"\n";
+    b.print();
+    cout<<"\n";
+    a.intersection(b);
+    
 }
