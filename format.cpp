@@ -108,38 +108,38 @@ struct Set{
         }
     }
     
-    void intersection(const Set& other_set){
-        int* temp=new int[other_set.length];
-        int j=0;
+     Set intersection(const Set& other_set){
+        Set temp;
         for(int i=0;i<other_set.length;i++){
             if(find(0,length-1,other_set.arr[i])!=-1){
                 int index=find(0,length-1,other_set.arr[i]);
-                temp[j]=arr[index];
-                j++;
+                erase(index);
+                
             }
-           
+
         }
-        cout<<"Phan tu giao nhau cua 2 mang\n";
-        for(int i=0;i<j;i++){
-            cout<<temp[i]<<" ";
-        }
+
+        return temp;
+    
         
     }
-    void uni(const Set& other_set){
-        int* temp=new int[other_set.length];
-        int j=0;
-        for(int i=0;i<other_set.length;i++){
-            if(find(0,length-1,other_set.arr[i])!=-1){
-                int index=find(0,length-1,other_set.arr[i]);
-                temp[j]=arr[index];
-                j++;
+    Set uni(const Set& other_set){
+        Set temp;
+        Set temp2=other_set;
+         for(int i=0;i<other_set.length;i++){
+            if(find(0,length-1,temp2[i])!=-1){
+                
+                temp2.erase(i);
+                
             }
-           
+            else temp.add(temp2[i]);
+
         }
-        cout<<"Phan tu giao nhau cua 2 mang\n";
-        for(int i=0;i<j;i++){
-            cout<<temp[i]<<" ";
-        }
+        
+        for(int i=0;i<length;i++) temp.add(arr[i]); 
+    
+        return temp;
+        
         
     }
 };
@@ -153,14 +153,19 @@ int main(){
     a.add(7);
     a.add(3);
     a.add(1);
+    a.add(4);
     a.add(7);
     a.add(9);
+    b.add(0);
     b.add(3);
     b.add(7);
+    b.add(11);
     a.print();
     cout<<"\n";
     b.print();
     cout<<"\n";
-    a.intersection(b);
+    Set c=a.uni(b);
+
+    c.print();
     
 }
