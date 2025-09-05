@@ -30,6 +30,7 @@ struct Vector {
         }
         return -1;
     }
+    
     void del(int index){
         if(index==0){
             int *temp = new int[length-1];
@@ -51,6 +52,7 @@ struct Vector {
         }
      
     }
+   
     void push_back(int value){
         if(arr==NULL){
             arr= new int[1];
