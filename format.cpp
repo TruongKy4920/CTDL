@@ -9,189 +9,67 @@ using namespace std;
 
 std::ifstream input("input.txt");
 std::ofstream output("output.txt");
-struct Set{
-    int *arr;
-    int length;
-    bool mark[MAX];
-    Set(){
-        arr=NULL;
-        length=0;
-    }
-    ~Set(){}
-    int& operator[](int index){
-        return arr[index];
+struct Matrix
+{
+    int **arr;
+    int m,n;
+    Matrix(int hang,int cot): m(hang), n(cot){
+        arr=new int*[m];
+        for(int i=0;i<m;i++){
+            arr[i]= new int [n];
+        }
     }
     void print(){
-        for(int i=0;i<length;i++){
-            cout<<arr[i]<<" ";
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++) cout<<arr[i][j]<<" ";
+            cout<<"\n";
         }
     }
-    // void insert(int value,int index){
-    //         if(index==0){
-    //             int* temp= new int[length+1];
-    //             temp[0]=value;
-                
-    //             for(int i=0;i<length;i++) temp[i+1]=arr[i];
-
-    //             delete[] arr;
-    //             arr=temp;
-    //             length++;
-    //         }
-            
-    //         else {
-    //             int* temp=new int[length+1];
-                
-                
-    //             for(int i=0;i<index;i++)  temp[i]=arr[i];
-
-    //             temp[index]=value;
-                
-    //             for(int i=index;i<length;i++) temp[i+1]=arr[i];
-                
-    //             length++;
-    //             delete[] arr;
-    //             arr=temp;
-                
-    //         }
-
-    //     }
-
-    // int find(int start,int end,int value){
-    //     while(start<=end){
-    //     int mid= (start+end)/2;
-    //     if(arr[mid]==value) return mid;
-    //     else if(arr[mid]<value) start=mid+1;
-    //     else end=mid-1;
-    //     }
-    //     return -1;
-    // }
-
-
-    void add(int value){
-            if(arr==NULL){
-                arr= new int[1];
-                mark[value]=true;
-                arr[0]=value;
-                length++;
-                return;
-            }
-            int *temp= new int[length+1];
-           for(int i=0;i<length;i++){
-                temp[i]=arr[i];
-           }
-           if(mark[value]!=true){
-            temp[length++]=value;
-            mark[value]=true;
-            delete[] arr;
-            arr=temp;
-           }
-            
+    void set_value(int value,int i,int j){
+        arr[i][j]=value;
     }
-
-    void erase(int index){
-        if(index==0){
-            int *temp=new int[length-1];
-            for(int i=0;i<length;i++) temp[i]=arr[i+1];
-            delete[] arr;
-            length--;
-            arr=temp;
-        }
-        else {
-            int *temp=new int[length-1];
-            for(int i=0;i<index;i++) temp[i]=arr[i];
-            for(int i=index+1;i<length;i++) temp[i-1]=arr[i];
-            delete[] arr;
-            length--;
-            arr=temp;
-        }
-    }
-    
-//      Set intersection(const Set& other_set){
-//         Set temp;
-//         for(int i=0;i<other_set.length;i++){
-//             if(find(0,length-1,other_set.arr[i])!=-1){
-//                 int index=find(0,length-1,other_set.arr[i]);
-//                 erase(index);
-                
-//             }
-
-//         }
-
-//         return temp;
-    
-        
-//     }
-//     Set uni(const Set& other_set){
-//         Set temp;
-//         Set temp2=other_set;
-//          for(int i=0;i<other_set.length;i++){
-//             if(find(0,length-1,temp2[i])!=-1){
-                
-//                 temp2.erase(i);
-                
-//             }
-//             else temp.add(temp2[i]);
-
-//         }
-        
-//         for(int i=0;i<length;i++) temp.add(arr[i]); 
-    
-//         return temp;
-        
-        
-//     }
-
-    Set intersection(const Set& other_set){
-        Set temp;
-        for(int i=0;i<length;i++){
-            for(int j=0;j<other_set.length;j++){
-                if(other_set.arr[j]==arr[i]){
-                    temp.add(other_set.arr[j]);
+    Matrix& Multiply(const Matrix& matrix){
+        int *temp= new int[m*matrix.n];
+        int count=0;
+        if(n==matrix.m){
+            for(int i=0;i<m;i++){
+                for(int j=0;j<matrix.n;j++){
+                    
+                    for(int k=0;k<n;k++){
+                       temp[count]+=arr[i][k]*matrix.arr[k][j];
+                    }
+                    count++;
                 }
             }
+            count=0;
         }
-        return temp;
-    }
+        n=matrix.n;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                set_value(temp[count],i,j);
+                count++;
+            }
+        }
 
-    Set uni(const Set& other_set){
-        Set temp;
-        for(int i=0;i<length;i++){
-           temp.add(arr[i]);
-        }
-        for(int i=0;i<other_set.length;i++){
-           temp.add(other_set.arr[i]);
-        }
-        return temp;
+        return *this;
     }
- };
-
+};
 
 int main(){
-    
-     Set a,b;
-    a.add(2);
-    a.add(1);
-    a.add(7);
-    a.add(3);
-    a.add(1);
-    a.add(4);
-    a.add(7);
-    a.add(9);
-    b.add(0);
-    b.add(3);
-    b.add(7);
-    b.add(11);
-    a.print();
-    cout<<"\n";
-    b.print();
-    cout<<"\n";
-    Set c=a.intersection(b);
-
-    c.print();
-     cout<<"\n";
-    Set d=a.uni(b);
-
-    d.print();
-    
-    
+    Matrix a(3,2);
+    Matrix b(2,3);
+    int value=1;
+    int value2=1;
+     for(int i=0;i<a.m;i++){
+            for(int j=0;j<a.n;j++) {
+                a.set_value(value++,i,j);
+            }
+        }
+         for(int i=0;i<b.m;i++){
+            for(int j=0;j<b.n;j++) {
+                b.set_value(value2++,i,j);
+            }
+        }
+   a.Multiply(b);
+   a.print();
 }
