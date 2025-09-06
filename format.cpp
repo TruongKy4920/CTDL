@@ -9,67 +9,131 @@ using namespace std;
 
 std::ifstream input("input.txt");
 std::ofstream output("output.txt");
-struct Matrix
-{
-    int **arr;
-    int m,n;
-    Matrix(int hang,int cot): m(hang), n(cot){
-        arr=new int*[m];
-        for(int i=0;i<m;i++){
-            arr[i]= new int [n];
-        }
-    }
-    void print(){
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++) cout<<arr[i][j]<<" ";
-            cout<<"\n";
-        }
-    }
-    void set_value(int value,int i,int j){
-        arr[i][j]=value;
-    }
-    Matrix& Multiply(const Matrix& matrix){
-        int *temp= new int[m*matrix.n];
-        int count=0;
-        if(n==matrix.m){
-            for(int i=0;i<m;i++){
-                for(int j=0;j<matrix.n;j++){
-                    
-                    for(int k=0;k<n;k++){
-                       temp[count]+=arr[i][k]*matrix.arr[k][j];
-                    }
-                    count++;
-                }
-            }
-            count=0;
-        }
-        n=matrix.n;
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                set_value(temp[count],i,j);
-                count++;
-            }
-        }
 
-        return *this;
+struct Stack {
+    int* arr;
+    int length;
+    Stack(){
+        arr=NULL;
+        length=0;
     }
+    ~Stack(){}
+    int& operator[](int index){
+        return arr[index];
+    }
+    int binary_search(int start,int end,int value){
+        while(start<=end){
+        int mid= (start+end)/2;
+        if(arr[mid]==value) return mid;
+        else if(arr[mid]<value) start=mid+1;
+        else end=mid-1;
+        }
+        return -1;
+    }
+    
+    void del(int index){
+        if(index==0){
+            int *temp = new int[length-1];
+            for(int i=0;i<length;i++){
+                temp[i]=arr[i+1];
+            }
+            delete[] arr;
+            length--;
+            arr=temp;
+        }
+        else if(index==length-1){
+            int *temp = new int[length-1];
+            for(int i=0;i<length-1;i++){
+                temp[i]=arr[i];
+            }
+            delete[] arr;
+            length--;
+            arr=temp;
+        }
+     
+    }
+   
+    void push_back(int value){
+        if(arr==NULL){
+            arr= new int[1];
+            arr[0]=value;
+            length++;
+            return;
+        }
+        int *temp=new int[length+1];
+        for (int i=0;i<length;i++){
+            temp[i]=arr[i];
+        }
+        temp[length++]=value;
+        delete[] arr;
+        arr=temp;
+    }
+    
+    void insert(int value,int index){
+            if(index==0){
+                int* temp= new int[length+1];
+                temp[0]=value;
+                
+                for(int i=0;i<length;i++) temp[i+1]=arr[i];
+
+                delete[] arr;
+                arr=temp;
+                length++;
+            }
+            else if(index==length-1){
+                push_back(value);
+            }
+            else {
+                int* temp=new int[length+1];
+                
+                
+                for(int i=0;i<index;i++)  temp[i]=arr[i];
+
+                temp[index]=value;
+                
+                for(int i=index;i<length;i++) temp[i+1]=arr[i];
+                
+                length++;
+                delete[] arr;
+                arr=temp;
+                
+            }
+
+        }
+    
+    int pop(){
+        int result = arr[length-1];
+        if(arr==NULL){
+           
+            return -1;
+        }
+        int *temp=new int[length-1];
+        for (int i=0;i<length-1;i++){
+            temp[i]=arr[i];
+        }
+        delete[] arr;
+        arr=temp;
+        length--;
+        return result;
+    }
+    
 };
 
+
 int main(){
-    Matrix a(3,2);
-    Matrix b(2,3);
-    int value=1;
-    int value2=1;
-     for(int i=0;i<a.m;i++){
-            for(int j=0;j<a.n;j++) {
-                a.set_value(value++,i,j);
-            }
-        }
-         for(int i=0;i<b.m;i++){
-            for(int j=0;j<b.n;j++) {
-                b.set_value(value2++,i,j);
-            }
-        }
-   a.Multiply(b);
-   a.print();
+    
+      Stack a;
+      a.push_back(2);
+      a.push_back(4);
+      a.push_back(8);
+      a.push_back(0);
+      a.push_back(6);
+      a.insert(7,3);
+      //a.del(a.length-1);
+      cout<<"Pop "<<a.pop()<<" \n";
+      for(int i=0;i<a.length;i++){
+        cout<<a[i]<<" ";
+      }
+      
+      
 }
