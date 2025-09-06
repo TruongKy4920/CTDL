@@ -1,0 +1,139 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <math.h>
+#define MAX 100
+using namespace std;
+
+std::ifstream input("input.txt");
+std::ofstream output("output.txt");
+
+struct Stack {
+    int* arr;
+    int length;
+    Stack(){
+        arr=NULL;
+        length=0;
+    }
+    ~Stack(){}
+    int& operator[](int index){
+        return arr[index];
+    }
+    int binary_search(int start,int end,int value){
+        while(start<=end){
+        int mid= (start+end)/2;
+        if(arr[mid]==value) return mid;
+        else if(arr[mid]<value) start=mid+1;
+        else end=mid-1;
+        }
+        return -1;
+    }
+    
+    void del(int index){
+        if(index==0){
+            int *temp = new int[length-1];
+            for(int i=0;i<length;i++){
+                temp[i]=arr[i+1];
+            }
+            delete[] arr;
+            length--;
+            arr=temp;
+        }
+        else if(index==length-1){
+            int *temp = new int[length-1];
+            for(int i=0;i<length-1;i++){
+                temp[i]=arr[i];
+            }
+            delete[] arr;
+            length--;
+            arr=temp;
+        }
+     
+    }
+   
+    void push_back(int value){
+        if(arr==NULL){
+            arr= new int[1];
+            arr[0]=value;
+            length++;
+            return;
+        }
+        int *temp=new int[length+1];
+        for (int i=0;i<length;i++){
+            temp[i]=arr[i];
+        }
+        temp[length++]=value;
+        delete[] arr;
+        arr=temp;
+    }
+    
+    void insert(int value,int index){
+            if(index==0){
+                int* temp= new int[length+1];
+                temp[0]=value;
+                
+                for(int i=0;i<length;i++) temp[i+1]=arr[i];
+
+                delete[] arr;
+                arr=temp;
+                length++;
+            }
+            else if(index==length-1){
+                push_back(value);
+            }
+            else {
+                int* temp=new int[length+1];
+                
+                
+                for(int i=0;i<index;i++)  temp[i]=arr[i];
+
+                temp[index]=value;
+                
+                for(int i=index;i<length;i++) temp[i+1]=arr[i];
+                
+                length++;
+                delete[] arr;
+                arr=temp;
+                
+            }
+
+        }
+    
+    int pop(){
+        int result = arr[length-1];
+        if(arr==NULL){
+           
+            return -1;
+        }
+        int *temp=new int[length-1];
+        for (int i=0;i<length-1;i++){
+            temp[i]=arr[i];
+        }
+        delete[] arr;
+        arr=temp;
+        length--;
+        return result;
+    }
+    
+};
+
+
+int main(){
+    
+      Stack a;
+      a.push_back(2);
+      a.push_back(4);
+      a.push_back(8);
+      a.push_back(0);
+      a.push_back(6);
+      a.insert(7,3);
+      //a.del(a.length-1);
+      cout<<"Pop "<<a.pop()<<" \n";
+      for(int i=0;i<a.length;i++){
+        cout<<a[i]<<" ";
+      }
+      
+      
+}

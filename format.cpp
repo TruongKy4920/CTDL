@@ -9,131 +9,94 @@ using namespace std;
 
 std::ifstream input("input.txt");
 std::ofstream output("output.txt");
-
-struct Stack {
-    int* arr;
+struct Node{
+    int data;
+    Node* next;
+    Node(){
+        data=0;
+        next=NULL;
+    }
+    Node(int value){
+        data=value;
+        next=NULL;
+    }
+};
+struct Linked_list {
+    Node* Head;
     int length;
-    Stack(){
-        arr=NULL;
+    Linked_list(){
+        Head=NULL;
         length=0;
     }
-    ~Stack(){}
+    ~Linked_list(){}
     int& operator[](int index){
-        return arr[index];
-    }
-    int binary_search(int start,int end,int value){
-        while(start<=end){
-        int mid= (start+end)/2;
-        if(arr[mid]==value) return mid;
-        else if(arr[mid]<value) start=mid+1;
-        else end=mid-1;
+        int i=0;
+        for(Node* node=Head;node->next!=NULL;node=node->next){
+            if(i==index) return node->data;
+            i++;
         }
-        return -1;
+      
+    }
+    void print(){
+        for(Node* node=Head;node!=NULL;node=node->next){
+           cout<<node->data<<" ";
+        }
     }
     
-    void del(int index){
-        if(index==0){
-            int *temp = new int[length-1];
-            for(int i=0;i<length;i++){
-                temp[i]=arr[i+1];
-            }
-            delete[] arr;
-            length--;
-            arr=temp;
-        }
-        else if(index==length-1){
-            int *temp = new int[length-1];
-            for(int i=0;i<length-1;i++){
-                temp[i]=arr[i];
-            }
-            delete[] arr;
-            length--;
-            arr=temp;
-        }
-     
-    }
-   
     void push_back(int value){
-        if(arr==NULL){
-            arr= new int[1];
-            arr[0]=value;
-            length++;
+        Node* new_node= new Node(value);
+        length++;
+        if(Head==NULL){
+            Head=new_node;
             return;
         }
-        int *temp=new int[length+1];
-        for (int i=0;i<length;i++){
-            temp[i]=arr[i];
-        }
-        temp[length++]=value;
-        delete[] arr;
-        arr=temp;
+        Node* node=Head;
+        while(node->next!=NULL) node=node->next;
+        node->next=new_node;
+       
     }
-    
-    void insert(int value,int index){
-            if(index==0){
-                int* temp= new int[length+1];
-                temp[0]=value;
-                
-                for(int i=0;i<length;i++) temp[i+1]=arr[i];
-
-                delete[] arr;
-                arr=temp;
-                length++;
-            }
-            else if(index==length-1){
-                push_back(value);
-            }
-            else {
-                int* temp=new int[length+1];
-                
-                
-                for(int i=0;i<index;i++)  temp[i]=arr[i];
-
-                temp[index]=value;
-                
-                for(int i=index;i<length;i++) temp[i+1]=arr[i];
-                
-                length++;
-                delete[] arr;
-                arr=temp;
-                
-            }
-
-        }
-    
-    int pop(){
-        int result = arr[length-1];
-        if(arr==NULL){
+   void erase(int index){
+    length--;
+    if(index<0 || index>length){
+        cout<<"out of range";
+        return;
+    }
+    if(index==0){
+        Node* node= Head;
+        Head = Head->next;
+        delete node;
+    }
+    int i=0;
+    Node* node=Head->next;
+    Node* node2=Head;
+    for(;node!=NULL;){
+           if(i==index) {
+            node2->next=node->next;
+            delete node;
+          
+           }
+           i++;
+           node2=node;
+           node=node->next;
            
-            return -1;
         }
-        int *temp=new int[length-1];
-        for (int i=0;i<length-1;i++){
-            temp[i]=arr[i];
-        }
-        delete[] arr;
-        arr=temp;
-        length--;
-        return result;
-    }
+   }
+        
     
 };
 
 
 int main(){
     
-      Stack a;
-      a.push_back(2);
-      a.push_back(4);
-      a.push_back(8);
-      a.push_back(0);
-      a.push_back(6);
-      a.insert(7,3);
+    Linked_list a;
+    a.push_back(2);
+    a.push_back(4);
+    a.push_back(8);
+    a.push_back(0);
+    a.push_back(6);
       //a.del(a.length-1);
-      cout<<"Pop "<<a.pop()<<" \n";
-      for(int i=0;i<a.length;i++){
-        cout<<a[i]<<" ";
-      }
+    a.erase(2);
+    a.print();
       
       
 }
